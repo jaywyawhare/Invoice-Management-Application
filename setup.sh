@@ -20,6 +20,14 @@ else
     sudo apt-get install mysql-server
 fi
 
+# Check if Maven is installed
+if check_command mvn; then
+    echo "Maven is already installed."
+else
+    echo "Maven is not installed. Installing Maven..."
+    sudo apt-get install maven
+fi
+
 # Check if Node.js and npm are installed
 if check_command node && check_command npm; then
     echo "Node.js and npm are already installed."
@@ -27,7 +35,6 @@ else
     echo "Node.js and npm are not installed. Installing Node.js..."
     sudo apt-get install nodejs npm
 fi
-
 
 # Install required npm packages
 
