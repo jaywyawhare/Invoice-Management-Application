@@ -1,1 +1,1 @@
-mysql -u username -p sales < ./database/hrc.sql
+mysql -u arrry -p sales < ./database/hrc.sql        # arrry is username for mysql
