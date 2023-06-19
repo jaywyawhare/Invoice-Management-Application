@@ -16,19 +16,48 @@ public class InvoiceDaoImpl implements InvoiceDao {
 
     @Override
     public List<Invoice> getAllInvoices() {
-        // Implementation of getAllInvoices() method
+        List<Invoice> invoices = new ArrayList<>();
+
+        try (Connection connection = DatabaseConnection.getConnection();
+                PreparedStatement statement = connection.prepareStatement(SELECT_ALL_INVOICES);
+                ResultSet resultSet = statement.executeQuery()) {
+
+            while (resultSet.next()) {
+                Invoice invoice = new Invoice();
+                invoice.setId(resultSet.getInt("Sl_no"));
+                invoice.setCustomerOrderId(resultSet.getInt("CUSTOMER_ORDER_ID"));
+                invoice.setSalesOrg(resultSet.getInt("SALES_ORG"));
+                invoice.setDistributionChannel(resultSet.getString("DISTRIBUTION_CHANNEL"));
+                invoice.setDivision(resultSet.getString("DIVISION"));
+                invoice.setReleasedCreditValue(resultSet.getDouble("RELEASED_CREDIT_VALUE"));
+                invoice.setPurchaseOrderType(resultSet.getString("PURCHASE_ORDER_TYPE"));
+                invoice.setCompanyCode(resultSet.getInt("COMPANY_CODE"));
+                invoice.setOrderCreationDate(resultSet.getString("ORDER_CREATION_DATE"));
+                invoice.setOrderCreationTime(resultSet.getString("ORDER_CREATION_TIME"));
+                invoice.setCreditControlArea(resultSet.getString("CREDIT_CONTROL_AREA"));
+                invoice.setSoldToParty(resultSet.getInt("SOLD_TO_PARTY"));
+                invoice.setOrderAmount(resultSet.getDouble("ORDER_AMOUNT"));
+                invoice.setRequestedDeliveryDate(resultSet.getString("REQUESTED_DELIVERY_DATE"));
+                invoice.setOrderCurrency(resultSet.getString("ORDER_CURRENCY"));
+                invoice.setCreditStatus(resultSet.getString("CREDIT_STATUS"));
+                invoice.setCustomerNumber(resultSet.getInt("CUSTOMER_NUMBER"));
+                invoice.setAmountInUSD(resultSet.getDouble("AMOUNT_IN_USD"));
+                invoice.setUniqueCustId(resultSet.getLong("UNIQUE_CUST_ID"));
+
+                invoices.add(invoice);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return invoices;
     }
 
     @Override
     public void addInvoice(Invoice invoice) {
-        // Implementation of addInvoice() method
-    }
-
-    @Override
-    public void updateInvoice(Invoice invoice) {
         try (Connection connection = DatabaseConnection.getConnection();
-                PreparedStatement statement = connection.prepareStatement(UPDATE_INVOICE)) {
-
+             PreparedStatement statement = connection.prepareStatement(INSERT_INVOICE)) {
+    
             statement.setInt(1, invoice.getCustomerOrderId());
             statement.setInt(2, invoice.getSalesOrg());
             statement.setString(3, invoice.getDistributionChannel());
@@ -47,8 +76,7 @@ public class InvoiceDaoImpl implements InvoiceDao {
             statement.setInt(16, invoice.getCustomerNumber());
             statement.setDouble(17, invoice.getAmountInUSD());
             statement.setLong(18, invoice.getUniqueCustId());
-            statement.setInt(19, invoice.getId());
-
+    
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -56,14 +84,13 @@ public class InvoiceDaoImpl implements InvoiceDao {
     }
 
     @Override
-    public void deleteInvoice(int id) {
-        try (Connection connection = DatabaseConnection.getConnection();
-                PreparedStatement statement = connection.prepareStatement(DELETE_INVOICE)) {
-
-            statement.setInt(1, id);
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+    public void updateInvoice(Invoice invoice) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'updateInvoice'");
     }
-}
+
+    @Override
+    public void deleteInvoice(int id) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'deleteInvoice'");
+    }
